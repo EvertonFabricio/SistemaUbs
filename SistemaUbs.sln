@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaUbs", "SistemaUbs\SistemaUbs.csproj", "{D52F2D80-31D3-43B5-9B18-D76EEC3CD1DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D52F2D80-31D3-43B5-9B18-D76EEC3CD1DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D52F2D80-31D3-43B5-9B18-D76EEC3CD1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D52F2D80-31D3-43B5-9B18-D76EEC3CD1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D52F2D80-31D3-43B5-9B18-D76EEC3CD1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8EDD2504-4707-4E05-A7FA-4F860622B7BB}
+	EndGlobalSection
+EndGlobal
