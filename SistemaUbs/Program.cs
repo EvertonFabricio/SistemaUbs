@@ -8,7 +8,7 @@ namespace SistemaUbs
         {
             Comum comum = new Comum();
             Preferencial preferencial = new Preferencial();
-            DadosPaciente dados = new DadosPaciente();
+            AguardaExame dados = new AguardaExame();
             int cont = 0;
 
             Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n");
@@ -17,17 +17,7 @@ namespace SistemaUbs
             Console.Clear();
             do
             {
-                Console.WriteLine($"No momento, temos {leitos} leitos disponíveis\n");
-                Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n\nEscolha a opção desejada: \n");
-                Console.WriteLine("1 - Retirar senha");
-                Console.WriteLine("2 - Chamar senha para cadastro e triagem");
-                Console.WriteLine("3 - Ver fila para fazer exame");
-                Console.WriteLine("4 - Ver fila de positivados aguardando internação");
-                Console.WriteLine("5 - Ver lista de internados, por ordem de internação");
-                Console.WriteLine("6 - Emergência - internação imediata");
-                Console.WriteLine("7 - Ver lista de pacientes liberados");
-                Console.WriteLine("0 - Sair do Sistema\n");
-                Console.Write("Opção: ");
+                Menu(leitos);
                 string menu = Console.ReadLine();
                 switch (menu)
                 {
@@ -42,7 +32,7 @@ namespace SistemaUbs
                             preferencial.push(new SenhaPreferencial(senha));
                         }
                         else
-                        {//retira senha comum
+                        { //retira senha comum
                             comum.push(new SenhaComum(senha));
                         }
                         Console.WriteLine("Pressione ENTER para voltar ao menu...");
@@ -50,29 +40,26 @@ namespace SistemaUbs
                         Console.Clear();
                         break;
 
+
                     case "2":
                         //chamar senha para cadastro e triagem.
                         if (cont < 2 && !preferencial.empty())
                         {
                             Console.Clear();
-                            preferencial.pop();
+                            int ID = preferencial.Head.Numero;
+                            preferencial.pop(); //chamo a senha e removo ela da lista de senhas.
                             cont++;
                             Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
                             string cadastro = Console.ReadLine().ToUpper();
                             if (cadastro == "S")
                             {
                                 Console.Clear();
-                                Console.WriteLine("**Cadastro do Paciente**");
-                                Console.WriteLine("Nome do paciente:"); string nome = Console.ReadLine();
-                                Console.WriteLine("Ano de Nascimento do paciente:"); int ano = int.Parse(Console.ReadLine());
-                                Console.WriteLine("CPF do paciente:"); string CPF = Console.ReadLine();
-                                Console.WriteLine("Ha quantos dias o paciente está com sintomas:"); int dias = int.Parse(Console.ReadLine());
-                                Console.WriteLine("Paciente tem comorbidade? (S ou N):"); string comorb = Console.ReadLine().ToUpper();
-                                Console.WriteLine("Paciente teve perda de Paladar? (S ou N):"); string perda = Console.ReadLine().ToUpper();
-                                Console.WriteLine("Temperatura do paciente:"); int temp = int.Parse(Console.ReadLine());
-                                Console.WriteLine("Saturação de oxigênio do paciente"); int sat = int.Parse(Console.ReadLine());
-                                dados.push(new Paciente(nome, ano, CPF, comorb, perda, temp, sat, dias));
-
+                                string nome, CPF, comorb;
+                                int ano, dias, temp, sat;
+                                Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
+                                dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias));
+                                dados.verifica1();
+                                ID = 0;
                             }
                             else
                             {
@@ -85,6 +72,7 @@ namespace SistemaUbs
                         else
                         {
                             Console.Clear();
+                            int ID = comum.Head.Numero;
                             comum.pop();
                             cont = 0;
                             Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
@@ -92,16 +80,12 @@ namespace SistemaUbs
                             if (cadastro == "S")
                             {
                                 Console.Clear();
-                                Console.WriteLine("**Cadastro do Paciente**");
-                                Console.WriteLine("Nome do paciente:"); string nome = Console.ReadLine();
-                                Console.WriteLine("Ano de Nascimento do paciente:"); int ano = int.Parse(Console.ReadLine());
-                                Console.WriteLine("CPF do paciente:"); string CPF = Console.ReadLine();
-                                Console.WriteLine("Ha quantos dias o paciente está com sintomas:"); int dias = int.Parse(Console.ReadLine());
-                                Console.WriteLine("Paciente tem comorbidade? (S ou N):"); string comorb = Console.ReadLine().ToUpper();
-                                Console.WriteLine("Paciente teve perda de Paladar? (S ou N):"); string perda = Console.ReadLine().ToUpper();
-                                Console.WriteLine("Temperatura do paciente:"); int temp = int.Parse(Console.ReadLine());
-                                Console.WriteLine("Saturação de oxigênio do paciente"); int sat = int.Parse(Console.ReadLine());
-                                dados.push(new Paciente(nome, ano, CPF, comorb, perda, temp, sat, dias));
+                                string nome, CPF, comorb;
+                                int ano, dias, temp, sat;
+                                Informacoes(out nome, out ano, out CPF, out dias, out comorb,out temp, out sat);
+                                dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias));
+                                dados.verifica1();
+                                ID = 0;
                             }
                             else
                             {
@@ -114,15 +98,15 @@ namespace SistemaUbs
                         break;
 
                     case "3":
-
-
+                        //chamar da fila "aguarda exame", dentro de paciente, pra fazer exame
+                        Console.WriteLine("Senha " + dados.Head.ID);
 
                         Console.ReadKey();
                         Console.Clear();
                         break;
 
                     case "4":
-
+                        dados.print();
                         Console.ReadKey();
                         Console.Clear();
                         break;
@@ -169,6 +153,33 @@ namespace SistemaUbs
 
 
 
+        }
+
+        private static void Menu(int leitos)
+        {
+            Console.WriteLine($"No momento, temos {leitos} leitos disponíveis\n");
+            Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n\nEscolha a opção desejada: \n");
+            Console.WriteLine("1 - Retirar senha");
+            Console.WriteLine("2 - Chamar senha para cadastro e triagem");
+            Console.WriteLine("3 - Chamar para fazer exame");
+            Console.WriteLine("4 - Ver fila de positivados aguardando internação");
+            Console.WriteLine("5 - Ver lista de internados, por ordem de internação");
+            Console.WriteLine("6 - Emergência - internação imediata");
+            Console.WriteLine("7 - Ver lista de pacientes liberados");
+            Console.WriteLine("0 - Sair do Sistema\n");
+            Console.Write("Opção: ");
+        }
+
+        private static void Informacoes(out string nome, out int ano, out string CPF, out int dias, out string comorb, out int temp, out int sat)
+        {
+            Console.WriteLine("**Cadastro do Paciente**");
+            Console.WriteLine("Nome do paciente:"); nome = Console.ReadLine();
+            Console.WriteLine("Ano de Nascimento do paciente:"); ano = int.Parse(Console.ReadLine());
+            Console.WriteLine("CPF do paciente:"); CPF = Console.ReadLine();
+            Console.WriteLine("Ha quantos dias o paciente está com sintomas:"); dias = int.Parse(Console.ReadLine());
+            Console.WriteLine("Paciente tem comorbidade? (S ou N):"); comorb = Console.ReadLine().ToUpper();
+            Console.WriteLine("Temperatura do paciente:"); temp = int.Parse(Console.ReadLine());
+            Console.WriteLine("Saturação de oxigênio do paciente"); sat = int.Parse(Console.ReadLine());
         }
     }
 }

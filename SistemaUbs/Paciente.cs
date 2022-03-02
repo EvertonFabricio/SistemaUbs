@@ -8,23 +8,24 @@ namespace SistemaUbs
 {
     internal class Paciente
     {
+        public int ID { get; set; }
         public string Nome { get; set; }
         public int AnoNasc { get; set; }
         public string CPF { get; set; }
         public string Comorb { get; set; }
-        public string PerdaPaladar { get; set; }
         public int Temp { get; set; }
         public int Saturacao { get; set; }
         public int DiasSintoma { get; set; }
         public Paciente Next { get; set; }
         public Exames PCR { get; set; }
-        public Paciente(string nome, int anoNasc, string cPF, string comorb, string perdaPaladar, int temp, int saturacao, int diasSintoma)
+
+        public Paciente(int iD, string nome, int anoNasc, string cPF, string comorb, int temp, int saturacao, int diasSintoma)
         {
+            ID = iD;
             Nome = nome;
             AnoNasc = anoNasc;
             CPF = cPF;
             Comorb = comorb;
-            PerdaPaladar = perdaPaladar;
             Temp = temp;
             Saturacao = saturacao;
             DiasSintoma = diasSintoma;
@@ -33,16 +34,16 @@ namespace SistemaUbs
         }
         public override string ToString()
         {
-            return $"Nome do Paciente: {Nome}\nIdade: {2022 - AnoNasc}\nCPF: {CPF}.\nTem comorbidade?: {Comorb}" +
-                $"\nPerdeu o Paladar?: {PerdaPaladar}\nTemperatura: {Temp}°C\nSaturação de Oxigenio no Sangue: {Saturacao}%\nEstá com sintomas à {DiasSintoma} dias";
+            return $"ID do paciente: {ID}\nNome do Paciente: {Nome}\nIdade: {2022 - AnoNasc}\nCPF: {CPF}.\nTem comorbidade?: {Comorb}" +
+                $"\nTemperatura: {Temp}°C\nSaturação de Oxigenio no Sangue: {Saturacao}%\nEstá com sintomas à {DiasSintoma} dias";
         }
     }
 
-    internal class DadosPaciente
+    internal class AguardaExame
     {
         public Paciente Head;
         public Paciente Tail;
-        public DadosPaciente()
+        public AguardaExame()
         {
             Head = null;
             Tail = null;
@@ -85,58 +86,82 @@ namespace SistemaUbs
                 {
                     Console.WriteLine(aux.ToString());
                     aux = aux.Next;
+                    Console.WriteLine("\n\n");
                 } while (aux != null);
             }
+        }
+
+        public void pop()
+        {
+            if (empty())
+            {
+                Console.WriteLine("Não existem pessoas aguardando exame.");
+            }
+            else
+            {
+                Head=Head.Next;
+            }
+            if (Head == null)
+            {
+                Tail = null;
+            }
+            Console.WriteLine("Pressione ENTER para continuar...");
+            
         }
 
         public void verifica1()
         {
             Paciente aux = Head;
-            if (aux.DiasSintoma <= 3 && aux.Temp <= 37 && aux.PerdaPaladar == "N" && aux.Saturacao >= 88)
+            if (aux.DiasSintoma < 3 && aux.Temp < 37 && aux.Saturacao >= 88)
             {
-                Console.WriteLine("Sintomas do paciente indicam que não é COVID. Liberar paciente.");
+                Console.WriteLine("\nSintomas do paciente indicam que não é COVID. Liberar paciente.");
+                pop();
+                Console.ReadKey();
+                Console.Clear();
             }
             else
             {
-                //manda pra fila pra fazer o exame.
+                Console.WriteLine("\nPaciente deve fazer o exame PCR. Por favor aguarde.");
+                Console.ReadKey();
+                Console.Clear();
             }
-            
-            
-            
-            
-            if (aux.Saturacao <= 88)
-            {
-                //mando pra fila de internação
-                Console.WriteLine("Paciente com Saturação baixa. Encaminhar para internação.");
-            }
-            else if (aux.Temp >= 37 && aux.Comorb == "S")
-            {
-                //mando pra fila de internação
-                Console.WriteLine("Paciente com comorbidade e febre. Encaminhar para internação");
-            }
-            else if (aux.Temp >= 37 && aux.PerdaPaladar == "S")
-            {
-                //mando pra fila de internação
-                Console.WriteLine("Paciente com febre e perda de paladar. Encaminhar para internação");
-            }
-            else if (2022 - aux.AnoNasc >= 60 && aux.Comorb == "S")
-            {
-                //mando pra fila de internação
-            }
-            else if (2022 - aux.AnoNasc >= 60 && aux.Temp >= 37)
-            {
-                //mando pra fila de internação
-            }
-            else if (2022 - aux.AnoNasc >= 60 && aux.PerdaPaladar == "S")
-            {
-                //mando pra fila de internação
-            }
-            else
-            {
-                Console.WriteLine("Paciente com sintomas que não necessitam de internação.");
-                Console.WriteLine("Liberar paciente com recomendação de isolamento.");
-                Head = Head.Next;
-            }
+
+
+
+
+            //if (aux.Saturacao <= 88)
+            //{
+            //    //mando pra fila de internação
+            //    Console.WriteLine("Paciente com Saturação baixa. Encaminhar para internação.");
+            //}
+            //else if (aux.Temp >= 37 && aux.Comorb == "S")
+            //{
+            //    //mando pra fila de internação
+            //    Console.WriteLine("Paciente com comorbidade e febre. Encaminhar para internação");
+            //}
+            //else if (aux.Temp >= 37 && aux.PerdaPaladar == "S")
+            //{
+            //    //mando pra fila de internação
+            //    Console.WriteLine("Paciente com febre e perda de paladar. Encaminhar para internação");
+            //}
+            //else if (2022 - aux.AnoNasc >= 60 && aux.Comorb == "S")
+            //{
+            //    //mando pra fila de internação
+            //}
+            //else if (2022 - aux.AnoNasc >= 60 && aux.Temp >= 37)
+            //{
+            //    //mando pra fila de internação
+            //}
+            //else if (2022 - aux.AnoNasc >= 60 && aux.PerdaPaladar == "S")
+            //{
+            //    //mando pra fila de internação
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Paciente com sintomas que não necessitam de internação.");
+            //    Console.WriteLine("Liberar paciente com recomendação de isolamento.");
+            //    Head = Head.Next;
+            //}
 
 
 

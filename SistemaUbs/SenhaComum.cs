@@ -86,7 +86,6 @@ namespace SistemaUbs
                 Tail = null;
             Console.WriteLine("Pressione ENTER para continuar...");
             Console.ReadKey();
-            
         }
 
 
