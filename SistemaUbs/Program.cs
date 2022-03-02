@@ -45,7 +45,6 @@ namespace SistemaUbs
                         {//retira senha comum
                             comum.push(new SenhaComum(senha));
                         }
-
                         Console.WriteLine("Pressione ENTER para voltar ao menu...");
                         Console.ReadKey();
                         Console.Clear();
@@ -55,39 +54,69 @@ namespace SistemaUbs
                         //chamar senha para cadastro e triagem.
                         if (cont < 2 && !preferencial.empty())
                         {
+                            Console.Clear();
                             preferencial.pop();
                             cont++;
+                            Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
+                            string cadastro = Console.ReadLine().ToUpper();
+                            if (cadastro == "S")
+                            {
+                                Console.Clear();
+                                Console.WriteLine("**Cadastro do Paciente**");
+                                Console.WriteLine("Nome do paciente:"); string nome = Console.ReadLine();
+                                Console.WriteLine("Ano de Nascimento do paciente:"); int ano = int.Parse(Console.ReadLine());
+                                Console.WriteLine("CPF do paciente:"); string CPF = Console.ReadLine();
+                                Console.WriteLine("Ha quantos dias o paciente está com sintomas:"); int dias = int.Parse(Console.ReadLine());
+                                Console.WriteLine("Paciente tem comorbidade? (S ou N):"); string comorb = Console.ReadLine().ToUpper();
+                                Console.WriteLine("Paciente teve perda de Paladar? (S ou N):"); string perda = Console.ReadLine().ToUpper();
+                                Console.WriteLine("Temperatura do paciente:"); int temp = int.Parse(Console.ReadLine());
+                                Console.WriteLine("Saturação de oxigênio do paciente"); int sat = int.Parse(Console.ReadLine());
+                                dados.push(new Paciente(nome, ano, CPF, comorb, perda, temp, sat, dias));
+
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Pressione ENTER para voltar ao menu...");
+                                Console.ReadKey();
+                                Console.Clear();
+                            }
                         }
                         else
                         {
+                            Console.Clear();
                             comum.pop();
                             cont = 0;
-                        }
-                        Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
-                        string cadastro = Console.ReadLine().ToUpper();
-                        if (cadastro == "S")
-                        {
-                            Console.Clear();
-                            Console.WriteLine("**Cadastro do Paciente**");
-                            Console.WriteLine("Nome do paciente:"); string nome = Console.ReadLine();
-                            Console.WriteLine("Ano de Nascimento do paciente:"); int ano = int.Parse(Console.ReadLine());
-                            Console.WriteLine("CPF do paciente:"); string CPF = Console.ReadLine();
-                            Console.WriteLine("Ha quantos dias o paciente está com sintomas:"); int dias = int.Parse(Console.ReadLine());
-                            Console.WriteLine("Paciente tem comorbidade? (S ou N):"); string comorb = Console.ReadLine().ToUpper();
-                            Console.WriteLine("Paciente teve perda de Paladar? (S ou N):"); string perda = Console.ReadLine().ToUpper();
-                            Console.WriteLine("Temperatura do paciente:"); int temp = int.Parse(Console.ReadLine());
-                            Console.WriteLine("Saturação de oxigênio do paciente"); int sat = int.Parse(Console.ReadLine());
-                            dados.push(new Paciente(nome, ano, CPF, comorb, perda, temp, sat, dias));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Pressione ENTER para voltar ao menu...");
-                            Console.ReadKey();
-                            Console.Clear();
+                            Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
+                            string cadastro = Console.ReadLine().ToUpper();
+                            if (cadastro == "S")
+                            {
+                                Console.Clear();
+                                Console.WriteLine("**Cadastro do Paciente**");
+                                Console.WriteLine("Nome do paciente:"); string nome = Console.ReadLine();
+                                Console.WriteLine("Ano de Nascimento do paciente:"); int ano = int.Parse(Console.ReadLine());
+                                Console.WriteLine("CPF do paciente:"); string CPF = Console.ReadLine();
+                                Console.WriteLine("Ha quantos dias o paciente está com sintomas:"); int dias = int.Parse(Console.ReadLine());
+                                Console.WriteLine("Paciente tem comorbidade? (S ou N):"); string comorb = Console.ReadLine().ToUpper();
+                                Console.WriteLine("Paciente teve perda de Paladar? (S ou N):"); string perda = Console.ReadLine().ToUpper();
+                                Console.WriteLine("Temperatura do paciente:"); int temp = int.Parse(Console.ReadLine());
+                                Console.WriteLine("Saturação de oxigênio do paciente"); int sat = int.Parse(Console.ReadLine());
+                                dados.push(new Paciente(nome, ano, CPF, comorb, perda, temp, sat, dias));
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Pressione ENTER para voltar ao menu...");
+                                Console.ReadKey();
+                                Console.Clear();
+                            }
                         }
                         break;
 
                     case "3":
+
+
+
                         Console.ReadKey();
                         Console.Clear();
                         break;
