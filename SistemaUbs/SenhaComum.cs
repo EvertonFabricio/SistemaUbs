@@ -43,13 +43,13 @@ namespace SistemaUbs
             {
                 Head = aux;
                 Tail = aux;
-                Console.WriteLine($"Sua senha é: C-{Tail.Numero}.");
+                Console.WriteLine($"\nSua senha é: C-{Tail.Numero}.");
             }
             else
             {
                 Tail.Next = aux;
                 Tail = aux;
-                Console.WriteLine($"Sua senha é: C-{Tail.Numero}.");
+                Console.WriteLine($"\nSua senha é: C-{Tail.Numero}.");
             }
         }
 
@@ -84,8 +84,8 @@ namespace SistemaUbs
             }
             if (Head == null)
                 Tail = null;
-            Console.WriteLine("Pressione ENTER para continuar...");
-            Console.ReadKey();
+            //Console.WriteLine("Pressione ENTER para continuar...");
+            //Console.ReadKey();
         }
 
 

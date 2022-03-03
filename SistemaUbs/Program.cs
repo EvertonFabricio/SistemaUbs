@@ -8,7 +8,9 @@ namespace SistemaUbs
         {
             Comum comum = new Comum();
             Preferencial preferencial = new Preferencial();
-            AguardaExame dados = new AguardaExame();
+            AguardaExame AgExame = new AguardaExame();
+            AguardaInternacao AgInt = new AguardaInternacao();
+
             int cont = 0;
 
             Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n");
@@ -19,6 +21,7 @@ namespace SistemaUbs
             {
                 Menu(leitos);
                 string menu = Console.ReadLine();
+                Console.Clear();
                 switch (menu)
                 {
                     case "1":
@@ -57,8 +60,8 @@ namespace SistemaUbs
                                 string nome, CPF, comorb;
                                 int ano, dias, temp, sat;
                                 Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
-                                dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
-                                dados.verifica1();
+                                AgExame.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
+                                AgExame.verifica1();
                                 ID = 0;
                             }
                             else
@@ -93,8 +96,8 @@ namespace SistemaUbs
                                     string nome, CPF, comorb;
                                     int ano, dias, temp, sat;
                                     Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
-                                    dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
-                                    dados.verifica1();
+                                    AgExame.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
+                                    AgExame.verifica1();
                                     ID = 0;
                                 }
                                 else
@@ -109,8 +112,8 @@ namespace SistemaUbs
                         break;
 
                     case "3":
-                            //chamar da fila "aguarda exame", dentro de paciente, pra fazer exame
-                        if (dados.empty())
+                        //chamar da fila "aguarda exame", dentro de paciente, pra fazer exame
+                        if (AgExame.empty())
                         {
                             Console.WriteLine("Não existem pacientes aguardando exame.\nPressione ENTER para voltar ao menu...");
                             Console.ReadKey();
@@ -118,16 +121,30 @@ namespace SistemaUbs
                         }
                         else
                         {
-                            Console.WriteLine($"Senha {dados.Head.ID}\nPaciente {dados.Head.Nome}");
-                            Console.WriteLine($"Informe o resultado do exame do(a) paciente {dados.Head.Nome}:");
+                            Console.WriteLine($"Senha {AgExame.Head.ID}\nPaciente {AgExame.Head.Nome}\n");
+                            Console.WriteLine($"\nInforme o resultado do exame do(a) paciente {AgExame.Head.Nome}:");
                             Console.WriteLine("1 - Positivo\n2 - Negativo");
-                            string resultado = Console.ReadLine();
-                            if (resultado == "1")
-                                dados.Head.Exame = new Exames("Positivo");
-                            else if (resultado == "2")
-                                dados.Head.Exame = new Exames("Negativo");
+                            bool flag = true;
+                            do
+                            {
+                                string resultado = Console.ReadLine();
+                                if (resultado == "1")
+                                {
+                                    AgExame.Head.Exame = new Exames("Positivo");
+                                    flag = false;
+                                    Console.Clear();
+                                }
+                                else if (resultado == "2")
+                                {
+                                    AgExame.Head.Exame = new Exames("Negativo");
+                                    flag = false;
+                                    Console.Clear();
+                                }
+                                else
+                                    Console.WriteLine("Opção invalida. Digite 1 se for positivo e 2 se for negativo");
+                            } while (flag == true);
 
-                            dados.verifica2();
+                            AgExame.verifica2();
 
                             Console.ReadKey();
                             Console.Clear();
@@ -135,13 +152,13 @@ namespace SistemaUbs
                         break;
 
                     case "4":
-                        dados.print();
+                        AgExame.print();
                         Console.ReadKey();
                         Console.Clear();
                         break;
 
                     case "5":
-
+                        AgInt.print();
                         Console.ReadKey();
                         Console.Clear();
                         break;
