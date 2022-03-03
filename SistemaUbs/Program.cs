@@ -57,7 +57,7 @@ namespace SistemaUbs
                                 string nome, CPF, comorb;
                                 int ano, dias, temp, sat;
                                 Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
-                                dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias));
+                                dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
                                 dados.verifica1();
                                 ID = 0;
                             }
@@ -71,38 +71,67 @@ namespace SistemaUbs
                         }
                         else
                         {
-                            Console.Clear();
-                            int ID = comum.Head.Numero;
-                            comum.pop();
-                            cont = 0;
-                            Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
-                            string cadastro = Console.ReadLine().ToUpper();
-                            if (cadastro == "S")
+                            if (comum.empty())
                             {
+                                Console.WriteLine("Não existem senhas para chamar.\nPressione ENTER para voltar ao menu...");
+                                Console.ReadKey();
                                 Console.Clear();
-                                string nome, CPF, comorb;
-                                int ano, dias, temp, sat;
-                                Informacoes(out nome, out ano, out CPF, out dias, out comorb,out temp, out sat);
-                                dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias));
-                                dados.verifica1();
-                                ID = 0;
+
                             }
                             else
                             {
+
                                 Console.Clear();
-                                Console.WriteLine("Pressione ENTER para voltar ao menu...");
-                                Console.ReadKey();
-                                Console.Clear();
+                                int ID = comum.Head.Numero;
+                                comum.pop();
+                                cont = 0;
+                                Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
+                                string cadastro = Console.ReadLine().ToUpper();
+                                if (cadastro == "S")
+                                {
+                                    Console.Clear();
+                                    string nome, CPF, comorb;
+                                    int ano, dias, temp, sat;
+                                    Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
+                                    dados.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
+                                    dados.verifica1();
+                                    ID = 0;
+                                }
+                                else
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("Pressione ENTER para voltar ao menu...");
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                }
                             }
                         }
                         break;
 
                     case "3":
-                        //chamar da fila "aguarda exame", dentro de paciente, pra fazer exame
-                        Console.WriteLine("Senha " + dados.Head.ID);
+                            //chamar da fila "aguarda exame", dentro de paciente, pra fazer exame
+                        if (dados.empty())
+                        {
+                            Console.WriteLine("Não existem pacientes aguardando exame.\nPressione ENTER para voltar ao menu...");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Senha {dados.Head.ID}\nPaciente {dados.Head.Nome}");
+                            Console.WriteLine($"Informe o resultado do exame do(a) paciente {dados.Head.Nome}:");
+                            Console.WriteLine("1 - Positivo\n2 - Negativo");
+                            string resultado = Console.ReadLine();
+                            if (resultado == "1")
+                                dados.Head.Exame = new Exames("Positivo");
+                            else if (resultado == "2")
+                                dados.Head.Exame = new Exames("Negativo");
 
-                        Console.ReadKey();
-                        Console.Clear();
+                            dados.verifica2();
+
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
                         break;
 
                     case "4":
