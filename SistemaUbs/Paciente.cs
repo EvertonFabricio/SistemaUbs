@@ -19,7 +19,7 @@ namespace SistemaUbs
         public Paciente Next { get; set; }
         public Exames Exame { get; set; }
 
-        public Paciente(int iD, string nome, int anoNasc, string cPF, string comorb, int temp, int saturacao, int diasSintoma, Exames pCR)
+        public Paciente(int iD, string nome, int anoNasc, string cPF, string comorb, int temp, int saturacao, int diasSintoma)
         {
             ID = iD;
             Nome = nome;
@@ -30,142 +30,12 @@ namespace SistemaUbs
             Saturacao = saturacao;
             DiasSintoma = diasSintoma;
             Next = null;
-            Exame = null;
+            //Exame = null;
         }
         public override string ToString()
         {
             return $"ID do paciente: {ID}\nNome do Paciente: {Nome}\nIdade: {2022 - AnoNasc}\nCPF: {CPF}.\nTem comorbidade?: {Comorb}" +
                 $"\nTemperatura: {Temp}°C\nSaturação de Oxigenio no Sangue: {Saturacao}%\nEstá com sintomas à {DiasSintoma} dias";
-        }
-    }
-
-    internal class AguardaExame
-    {
-        public Paciente Head;
-        public Paciente Tail;
-        public AguardaExame()
-        {
-            Head = null;
-            Tail = null;
-        }
-
-        public bool empty()
-        {
-            if (Head == null)
-                return true;
-            else
-                return false;
-        }
-
-        public void push(Paciente aux)
-        {
-            if (empty())
-            {
-                Head = aux;
-                Tail = aux;
-            }
-            else
-            {
-                Tail.Next = aux;
-                Tail = aux;
-            }
-            Console.WriteLine("Pressione ENTER para continuar...");
-            Console.ReadKey();
-        }
-
-        public void print()
-        {
-            if (empty())
-            {
-                Console.WriteLine("Não há pacientes cadastrados.");
-            }
-            else
-            {
-                Paciente aux = Head;
-                do
-                {
-                    Console.WriteLine(aux.ToString());
-                    aux = aux.Next;
-                    Console.WriteLine("\n\n");
-                } while (aux != null);
-            }
-        }
-
-        public void pop()
-        {
-            if (empty())
-            {
-                Console.WriteLine("Não existem pessoas aguardando exame.");
-            }
-            else
-            {
-                Head=Head.Next;
-            }
-            if (Head == null)
-            {
-                Tail = null;
-            }
-            Console.WriteLine("Pressione ENTER para continuar...");
-            
-        }
-
-        public void verifica1()
-        {//verifica se pode liberar paciente direto na triagem
-            Paciente aux = Head;
-            if (aux.DiasSintoma < 3 && aux.Temp < 37 && aux.Saturacao >= 88)
-            {
-                Console.WriteLine("\nSintomas do paciente indicam que não é COVID. Liberar paciente.");
-                pop();
-                Console.ReadKey();
-                Console.Clear();
-            }
-            else
-            {
-                Console.WriteLine("\nPaciente deve fazer o exame PCR. Por favor aguarde.");
-                Console.ReadKey();
-                Console.Clear();
-            }
-        }
-
-        public void verifica2()
-        {//verifica se PCR deu positivo ou negativo. Negativo libera a pessoa. Positivo analisa pra ver se precisa internar.
-            Paciente aux = Head;
-            AguardaInternacao AI = new AguardaInternacao();
-
-            if (aux.Exame.PCR == "Negativo")
-            {
-                Console.WriteLine("Exame negativo. Liberar paciente.");
-                Console.WriteLine("Pressione ENTER para voltar ao menu...");
-                Head = Head.Next;
-               
-            }
-            else
-            {
-                if (aux.Saturacao <= 88)
-                {
-                    Console.WriteLine("Saturação extremamente baixa. Encaminhar paciente para internação");
-                    AI.Push(Head);
-                    Head = Head.Next;
-                }
-                else if (aux.Temp >= 37 && aux.Comorb == "S")
-                {
-                    Console.WriteLine("Paciente com comorbidade e febre. Encaminhar para internação");
-                }
-                else if (2022 - aux.AnoNasc >= 60 && aux.Comorb == "S")
-                {
-                    Console.WriteLine("Paciente idoso com comorbidade. Encaminhar para internação");
-                }
-                else if (2022 - aux.AnoNasc >= 60 && aux.Temp >= 37)
-                {
-                    Console.WriteLine("Paciente idoso com febre. Encaminhar para internação");
-                }
-                else
-                {
-                    Console.WriteLine("Paciente com sintomas que não necessitam de internação.");
-                    Console.WriteLine("Liberar paciente com recomendação de isolamento.");
-                    Head = Head.Next;
-                }
-            }
         }
     }
 }

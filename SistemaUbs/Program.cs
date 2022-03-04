@@ -6,82 +6,94 @@ namespace SistemaUbs
     {
         static void Main(string[] args)
         {
-            Comum comum = new Comum();
-            Preferencial preferencial = new Preferencial();
-            AguardaExame AgExame = new AguardaExame();
-            AguardaInternacao AgInt = new AguardaInternacao();
-
-            int cont = 0;
+            FilaComum comum = new FilaComum();
+            FilaPreferencial preferencial = new FilaPreferencial();
+            FilaExame filaExame = new FilaExame();
+            FilaInternacao filaInternacao = new FilaInternacao();
+            Internacoes internacoes = new Internacoes(0);
+            int cont = 0;//faz a contagem das senhas chamadas pra chamar 2 pra 1
 
             Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n");
             Console.WriteLine("Por favor, informe a quantidade de leitos disponíveis:");
             int leitos = int.Parse(Console.ReadLine());
+            internacoes.Leitos = leitos;
             Console.Clear();
             do
             {
-                Menu(leitos);
+                MenuPrincipal(internacoes);
+
                 string menu = Console.ReadLine();
                 Console.Clear();
                 switch (menu)
                 {
-                    case "1":
-                        //informando a data de nascimento.
+                    case "1":  //informa a data de nascimento pra ver se a senha é preferencial ou comum.
+
                         Console.Write("Informe o ano em que você nasceu:");
                         int nascimento = int.Parse(Console.ReadLine());
                         int senha = new Random().Next(111, 999);
 
-                        if (2022 - nascimento >= 60)
-                        { //retira senha preferencial
+                        if (2022 - nascimento >= 60)  //retira senha preferencial
+                        {
                             preferencial.push(new SenhaPreferencial(senha));
                         }
-                        else
-                        { //retira senha comum
+                        else //retira senha comum
+                        {
                             comum.push(new SenhaComum(senha));
                         }
-                        Console.WriteLine("Pressione ENTER para voltar ao menu...");
+                        Console.WriteLine("\nPressione ENTER para voltar ao menu...");
                         Console.ReadKey();
                         Console.Clear();
                         break;
 
 
-                    case "2":
-                        //chamar senha para cadastro e triagem.
-                        if (cont < 2 && !preferencial.empty())
+                    case "2": //chamar senha para cadastro e triagem.
+
+                        if (cont < 2 && !preferencial.empty()) //chama 2 preferencial.
                         {
                             Console.Clear();
-                            int ID = preferencial.Head.Numero;
-                            preferencial.pop(); //chamo a senha e removo ela da lista de senhas.
+                            int ID = preferencial.Head.Numero; //fixa o numero da senha como ID do paciente.
+                            preferencial.pop(); //chamo a senha na tela e removo ela da lista de senhas.
                             cont++;
                             Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
-                            string cadastro = Console.ReadLine().ToUpper();
-                            if (cadastro == "S")
+                            bool flag = false;
+                            do
                             {
-                                Console.Clear();
-                                string nome, CPF, comorb;
-                                int ano, dias, temp, sat;
-                                Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
-                                AgExame.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
-                                AgExame.verifica1();
-                                ID = 0;
-                            }
-                            else
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Pressione ENTER para voltar ao menu...");
-                                Console.ReadKey();
-                                Console.Clear();
-                            }
+                                string cadastro = Console.ReadLine().ToUpper();
+                                if (cadastro == "S") // escolheu cadastrar o paciente, entra aqui pra informar os dados.
+                                {
+                                    flag = true;
+                                    Console.Clear();
+                                    string nome, CPF, comorb;
+                                    int ano, dias, temp, sat;
+                                    Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
+                                    filaExame.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias));//coloca os dados na fila de exame
+                                    filaExame.VerificaSuspeita();//verifica se informaçoes salvas é covid ou nao. Se for, mantem salvo, senão, chuta pra fora 
+                                    ID = 0;//zera o ID, só por segurança, pq necessidade não tem não.
+                                }
+                                else if (cadastro == "N")
+                                {
+                                    flag = true;
+                                    Console.Clear();
+                                    Console.WriteLine("Senha descartada. Pressione ENTER para voltar ao menu...");
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Opção incorreta. Digite S para cadastrar o paciente, ou N para descartar a senha e voltar ao menu.");
+                                }
+                            } while (flag == false);
                         }
-                        else
+                        else // se ja tiver chamado 2 senhas pref. ou se não tiver mais nenhuma pra chamar, vem pra cá.
                         {
-                            if (comum.empty())
+                            if (comum.empty()) // se lista de senha comum tiver vazia, não chama ninguem (claro).
                             {
                                 Console.WriteLine("Não existem senhas para chamar.\nPressione ENTER para voltar ao menu...");
                                 Console.ReadKey();
                                 Console.Clear();
 
                             }
-                            else
+                            else// se tiver gente na lista de senha comum, vem pra cá e faz a mesma coisa da senha preferencial.
                             {
 
                                 Console.Clear();
@@ -89,31 +101,41 @@ namespace SistemaUbs
                                 comum.pop();
                                 cont = 0;
                                 Console.WriteLine("\nDeseja cadastrar o paciente? (S ou N)");
-                                string cadastro = Console.ReadLine().ToUpper();
-                                if (cadastro == "S")
+                                bool flag = false;
+                                do
                                 {
-                                    Console.Clear();
-                                    string nome, CPF, comorb;
-                                    int ano, dias, temp, sat;
-                                    Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
-                                    AgExame.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias, null));
-                                    AgExame.verifica1();
-                                    ID = 0;
-                                }
-                                else
-                                {
-                                    Console.Clear();
-                                    Console.WriteLine("Pressione ENTER para voltar ao menu...");
-                                    Console.ReadKey();
-                                    Console.Clear();
-                                }
+                                    string cadastro = Console.ReadLine().ToUpper();
+                                    if (cadastro == "S")
+                                    {
+                                        flag = true;
+                                        Console.Clear();
+                                        string nome, CPF, comorb;
+                                        int ano, dias, temp, sat;
+                                        Informacoes(out nome, out ano, out CPF, out dias, out comorb, out temp, out sat);
+                                        filaExame.push(new Paciente(ID, nome, ano, CPF, comorb, temp, sat, dias));
+                                        filaExame.VerificaSuspeita();
+                                        ID = 0;
+                                    }
+                                    else if (cadastro == "N")
+                                    {
+                                        flag = true;
+                                        Console.Clear();
+                                        Console.WriteLine("Pressione ENTER para voltar ao menu...");
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Opção incorreta. Digite S para cadastrar o paciente, ou N para descartar a senha e voltar ao menu.");
+                                    }
+                                } while (flag == false);
                             }
                         }
                         break;
 
-                    case "3":
-                        //chamar da fila "aguarda exame", dentro de paciente, pra fazer exame
-                        if (AgExame.empty())
+                    case "3": //chamar da fila  de exames pra colocar o resultado do exame (positivo ou negativo)
+
+                        if (filaExame.empty())
                         {
                             Console.WriteLine("Não existem pacientes aguardando exame.\nPressione ENTER para voltar ao menu...");
                             Console.ReadKey();
@@ -121,56 +143,58 @@ namespace SistemaUbs
                         }
                         else
                         {
-                            Console.WriteLine($"Senha {AgExame.Head.ID}\nPaciente {AgExame.Head.Nome}\n");
-                            Console.WriteLine($"\nInforme o resultado do exame do(a) paciente {AgExame.Head.Nome}:");
+                            Console.WriteLine($"Senha {filaExame.Head.ID}\nPaciente {filaExame.Head.Nome}\n");
+                            Console.WriteLine($"\nInforme o resultado do exame do(a) paciente {filaExame.Head.Nome}:");
                             Console.WriteLine("1 - Positivo\n2 - Negativo");
                             bool flag = true;
-                            do
+                            do //laço só pra controlar se o usuario vai digitar a opçao certa.
                             {
                                 string resultado = Console.ReadLine();
                                 if (resultado == "1")
                                 {
-                                    AgExame.Head.Exame = new Exames("Positivo");
+                                    filaExame.Head.Exame = new Exames("Positivo");
                                     flag = false;
                                     Console.Clear();
                                 }
                                 else if (resultado == "2")
                                 {
-                                    AgExame.Head.Exame = new Exames("Negativo");
+                                    filaExame.Head.Exame = new Exames("Negativo");
                                     flag = false;
                                     Console.Clear();
                                 }
                                 else
                                     Console.WriteLine("Opção invalida. Digite 1 se for positivo e 2 se for negativo");
-                            } while (flag == true);
+                            } while (flag == true); //ja atribuiu ao paciente se o exame deu positivo ou negativo.
 
-                            AgExame.verifica2();
+                            Paciente pessoa = filaExame.VerificarInternacao(); //chama a função de dentro da fila exames pra verificar a internação e atribui o retorno dela na variavel pessoa
+                            filaInternacao.push(pessoa); // faz um push na fila de internação, atribuindo a variavel pessoa nesse push, que está com o valor do paciente.
 
                             Console.ReadKey();
                             Console.Clear();
                         }
                         break;
 
-                    case "4":
-                        AgExame.print();
+                    case "4": // ver fila aguardando exame
+                        filaExame.print();
                         Console.ReadKey();
                         Console.Clear();
                         break;
 
-                    case "5":
-                        AgInt.print();
+                    case "5": // ver fila de pessoas positivadas que precisam de internação.
+                        filaInternacao.print();
                         Console.ReadKey();
                         Console.Clear();
                         break;
 
-                    case "6":
-
+                    case "6": //ver a lista de internados
+                        internacoes.print();
                         Console.ReadKey();
                         Console.Clear();
                         break;
 
                     case "7":
-
+                        filaInternacao.VerificaVaga();
+                        internacoes.Import();
                         Console.ReadKey();
                         Console.Clear();
                         break;
@@ -201,17 +225,18 @@ namespace SistemaUbs
 
         }
 
-        private static void Menu(int leitos)
+        private static void MenuPrincipal(Internacoes internacoes)
         {
-            Console.WriteLine($"No momento, temos {leitos} leitos disponíveis\n");
+            Console.WriteLine($"No momento, temos {internacoes.Leitos} leitos disponíveis\n");
             Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n\nEscolha a opção desejada: \n");
             Console.WriteLine("1 - Retirar senha");
             Console.WriteLine("2 - Chamar senha para cadastro e triagem");
             Console.WriteLine("3 - Chamar para fazer exame");
-            Console.WriteLine("4 - Ver fila de positivados aguardando internação");
-            Console.WriteLine("5 - Ver lista de internados, por ordem de internação");
-            Console.WriteLine("6 - Emergência - internação imediata");
-            Console.WriteLine("7 - Ver lista de pacientes liberados");
+            Console.WriteLine("4 - Ver fila Aguardando Exame");
+            Console.WriteLine("5 - Ver fila de positivados aguardando internação");
+            Console.WriteLine("6 - Ver lista de internados, por ordem de internação");
+            Console.WriteLine("7 - Emergência - internação imediata");
+            Console.WriteLine("8 - Ver lista de pacientes liberados");
             Console.WriteLine("0 - Sair do Sistema\n");
             Console.Write("Opção: ");
         }

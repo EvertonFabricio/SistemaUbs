@@ -20,11 +20,11 @@ namespace SistemaUbs
     
     
     
-    internal class Comum
+    internal class FilaComum
     {
         public SenhaComum Head { get; set; }
         public SenhaComum Tail { get; set; }
-        public Comum()
+        public FilaComum()
         {
             Head = null;
             Tail = null;

@@ -17,11 +17,11 @@ namespace SistemaUbs
             Next = null;
         }
     }
-    internal class Preferencial
+    internal class FilaPreferencial
     {
         public SenhaPreferencial Head { get; set; }
         public SenhaPreferencial Tail { get; set; }
-        public Preferencial()
+        public FilaPreferencial()
         {
             Head = null;
             Tail = null;
@@ -76,7 +76,7 @@ namespace SistemaUbs
             }
             else
             {
-                Console.WriteLine($"Próxima senha: P-{Head.Numero}.");
+                Console.WriteLine($"\nPróxima senha: P-{Head.Numero}.");
                 Head = Head.Next;
             }
             if (Head == null)
