@@ -101,7 +101,7 @@ namespace SistemaUbs
 
         public Paciente VerificarInternacao() //essa função não pode ser void. Precisa retornar um valor. Nesse caso, ela retorna a pessoa que está na Head.
         {//verifica se PCR deu positivo ou negativo. Negativo libera a pessoa. Positivo analisa pra ver se precisa internar.
-            
+
             Paciente aux = Head;
             if (aux.Exame.PCR == "Negativo")
             {
@@ -112,6 +112,24 @@ namespace SistemaUbs
             else if (aux.Saturacao < 90)
             {
                 Console.WriteLine("Saturação extremamente baixa. Encaminhar paciente para internação\n");
+                pop();
+                return aux; //esse retorno fica armazenado na função verificainternação. Onde eu chamar ela, eu consigo ver o valor que ela tem.
+            }
+            else if (aux.Temp >= 37 && aux.Comorb == "S")
+            {
+                Console.WriteLine("Paciente com febre e comorbidade. Encaminhar paciente para internação\n");
+                pop();
+                return aux; //esse retorno fica armazenado na função verificainternação. Onde eu chamar ela, eu consigo ver o valor que ela tem.
+            }
+            else if (aux.DiasSintoma > 5 && aux.Temp >= 37)
+            {
+                Console.WriteLine("Paciente com febre e sintomas a mais de 5 dias. Encaminhar paciente para internação\n");
+                pop();
+                return aux; //esse retorno fica armazenado na função verificainternação. Onde eu chamar ela, eu consigo ver o valor que ela tem.
+            }
+            else if (2022 - aux.AnoNasc > 60 && aux.Comorb == "S" )
+            {
+                Console.WriteLine("Paciente idoso com comorbidade. Encaminhar paciente para internação\n");
                 pop();
                 return aux; //esse retorno fica armazenado na função verificainternação. Onde eu chamar ela, eu consigo ver o valor que ela tem.
             }

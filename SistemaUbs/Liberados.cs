@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SistemaUbs
 {
-    internal class FilaInternacao
+    internal class Liberados
     {
-
         public Paciente Head;
         public Paciente Tail;
-        public FilaInternacao()
+
+        public Liberados()
         {
             Head = null;
             Tail = null;
@@ -45,7 +45,7 @@ namespace SistemaUbs
         {
             if (empty())
             {
-                Console.WriteLine("Não há pacientes na fila para internações.");
+                Console.WriteLine("Ainda não temos pacientes liberados.");
             }
             else
             {
@@ -63,7 +63,7 @@ namespace SistemaUbs
         {
             if (empty())
             {
-                Console.WriteLine("Não existem pessoas aguardando exame.");
+                Console.WriteLine("Não ha pacientes internados.");
             }
             else
             {
@@ -73,7 +73,11 @@ namespace SistemaUbs
             {
                 Tail = null;
             }
+            Console.WriteLine("Pressione ENTER para continuar...");
+
         }
+
+
 
     }
 }

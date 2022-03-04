@@ -84,22 +84,7 @@ namespace SistemaUbs
 
         }
 
-        public int VerificaLeito()
-        {
-            return Leitos;
-        }
-
-        public void Import()
-        {
-            FilaInternacao filaInt = new FilaInternacao();
-            Paciente pessoa = filaInt.VerificaVaga();
-            push(pessoa);
-
-
-
-
-        }
-
+        
 
     }
 }

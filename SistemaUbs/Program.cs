@@ -11,6 +11,7 @@ namespace SistemaUbs
             FilaExame filaExame = new FilaExame();
             FilaInternacao filaInternacao = new FilaInternacao();
             Internacoes internacoes = new Internacoes(0);
+            Liberados liberados = new Liberados();
             int cont = 0;//faz a contagem das senhas chamadas pra chamar 2 pra 1
 
             Console.WriteLine("\t>>> Sistema Auxiliar de Atendimento <<<\n");
@@ -20,6 +21,16 @@ namespace SistemaUbs
             Console.Clear();
             do
             {
+                if (filaInternacao != null)
+                {
+                    if (internacoes.Leitos >0)
+                    {
+                        var aux = filaInternacao.Head;
+                        filaInternacao.pop();
+                        internacoes.push(aux);
+                    }
+                }
+
                 MenuPrincipal(internacoes);
 
                 string menu = Console.ReadLine();
@@ -86,7 +97,7 @@ namespace SistemaUbs
                         }
                         else // se ja tiver chamado 2 senhas pref. ou se não tiver mais nenhuma pra chamar, vem pra cá.
                         {
-                            if (comum.empty()) // se lista de senha comum tiver vazia, não chama ninguem (claro).
+                            if (comum.empty()) // se lista de senha comum tiver vazia, não chama ninguem.
                             {
                                 Console.WriteLine("Não existem senhas para chamar.\nPressione ENTER para voltar ao menu...");
                                 Console.ReadKey();
@@ -193,11 +204,19 @@ namespace SistemaUbs
                         break;
 
                     case "7":
-                        filaInternacao.VerificaVaga();
-                        internacoes.Import();
+                        var aux = internacoes.Head;
+                        internacoes.pop();
+                        liberados.push(aux);                   
                         Console.ReadKey();
                         Console.Clear();
                         break;
+
+                    case "8":
+                        liberados.print();
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+
 
                     case "0":
 
@@ -217,12 +236,6 @@ namespace SistemaUbs
             } while (true);
 
 
-
-
-
-
-
-
         }
 
         private static void MenuPrincipal(Internacoes internacoes)
@@ -235,8 +248,9 @@ namespace SistemaUbs
             Console.WriteLine("4 - Ver fila Aguardando Exame");
             Console.WriteLine("5 - Ver fila de positivados aguardando internação");
             Console.WriteLine("6 - Ver lista de internados, por ordem de internação");
-            Console.WriteLine("7 - Emergência - internação imediata");
+            Console.WriteLine("7 - Liberar paciente com alta");
             Console.WriteLine("8 - Ver lista de pacientes liberados");
+            Console.WriteLine("9 - Emergência - internação imediata");
             Console.WriteLine("0 - Sair do Sistema\n");
             Console.Write("Opção: ");
         }
